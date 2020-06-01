@@ -1,13 +1,102 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './App.css';
 import NavBar from './components/NavBar'
+import WeatherDisplay from './components/WeatherDisplay'
+import Axios from 'axios';
 
-function App() {
-  return (
-    <React.Fragment>
-      <NavBar />
-    </React.Fragment>
-  );
-}
+class App extends Component {
+
+  state = {
+    coords: {
+      latitude: 45,
+      longitude: 60
+    },
+    data: {},
+    API_KEY: "1b37398830442ecf7120ac62f36587a2",
+    KEY: "FAKE_KEY",
+    inputData:""
+  }
+
+  componentDidMount(){
+    if(navigator.geolocation){
+      
+      navigator.geolocation.getCurrentPosition((position) => {
+        
+        let newCooords = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        }
+
+        this.setState({coords:newCooords});
+
+        Axios.get(`http://api.weatherstack.com/current?access_key=${this.state.API_KEY}&query=${this.state.coords.latitude},${this.state.coords.longitude}`).then( response => {
+
+          let weatherData = {
+            location: response.data.location.name,
+            temperature: response.data.current.temperature,
+            description: response.data.current.weather_descriptions[0],
+            region: response.data.location.region,
+            country: response.data.location.country,
+            wind_speed: response.data.current.wind_speed,
+            pressure: response.data.current.pressure,
+            precip: response.data.current.precip,
+            humidity: response.data.current.humidity,
+            img: response.data.current.weather_icons
+
+          }
+
+          this.setState({data: weatherData});
+          
+        })
+
+      })
+
+      
+    } else {
+      console.log("Not supported");
+    }
+
+  }
+
+  change = (value) => {
+    this.setState({inputData:value});
+  }
+
+  changeWeather = (event) => {
+    event.preventDefault();
+    
+    Axios.get(`http://api.weatherstack.com/current?access_key=${this.state.API_KEY}&query=${this.state.inputData}`).then( response => {
+      console.log(response);
+      let weatherData = {
+        location: response.data.location.name,
+        temperature: response.data.current.temperature,
+        description: response.data.current.weather_descriptions[0],
+        region: response.data.location.region,
+        country: response.data.location.country,
+        wind_speed: response.data.current.wind_speed,
+        pressure: response.data.current.pressure,
+        precip: response.data.current.precip,
+        humidity: response.data.current.humidity,
+        img: response.data.current.weather_icons
+
+      }
+
+      this.setState({data: weatherData});
+      this.setState({inputData: ""});
+
+      document.getElementById("search-city").reset();
+    })
+    
+  }
+
+  render(){
+    return (
+      <React.Fragment>
+        <NavBar changeWeather={this.changeWeather} changeRegion= {this.change}/>
+        <WeatherDisplay weatherData = {this.state.data}/>
+      </React.Fragment>
+    );
+  }
+}  
 
 export default App;
