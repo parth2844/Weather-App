@@ -13,7 +13,6 @@ class App extends Component {
     },
     data: {},
     API_KEY: "1b37398830442ecf7120ac62f36587a2",
-    KEY: "FAKE_KEY",
     inputData:""
   }
 
@@ -41,7 +40,10 @@ class App extends Component {
             pressure: response.data.current.pressure,
             precip: response.data.current.precip,
             humidity: response.data.current.humidity,
-            img: response.data.current.weather_icons
+            img: response.data.current.weather_icons,
+            feelslike: response.data.current.feelslike,
+            is_day: response.data.current.is_day,
+            time: response.data.location.localtime
 
           }
 
@@ -66,7 +68,7 @@ class App extends Component {
     event.preventDefault();
     
     Axios.get(`http://api.weatherstack.com/current?access_key=${this.state.API_KEY}&query=${this.state.inputData}`).then( response => {
-      console.log(response);
+      
       let weatherData = {
         location: response.data.location.name,
         temperature: response.data.current.temperature,
@@ -77,7 +79,10 @@ class App extends Component {
         pressure: response.data.current.pressure,
         precip: response.data.current.precip,
         humidity: response.data.current.humidity,
-        img: response.data.current.weather_icons
+        img: response.data.current.weather_icons,
+        feelslike: response.data.current.feelslike,
+        is_day: response.data.current.is_day,
+        time: response.data.location.localtime
 
       }
 

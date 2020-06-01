@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import './WeatherDisplay.css'
 
 function WeatherDisplay(props) {
-    const { temperature, description, location, region, country, wind_speed, pressure, precip, humidity, img } = props.weatherData;
+    const { temperature, description, location, region, country, wind_speed, pressure, precip, humidity, img, feelslike, time } = props.weatherData;
     return (
         <Container className="main-container">
             <Row className="row-custom">
@@ -14,11 +14,16 @@ function WeatherDisplay(props) {
                 </Col>                                               
             </Row>
             <Row className="row-custom">
+                <Col>
+                    <h4>Local Time: {time}</h4>
+                </Col>                                               
+            </Row>
+            <Row className="row-custom">
                 <Col xs="auto">
                     <img className="mainImg" src={img} alt="weather-img" />
                 </Col>
                 <Col>
-                    <Row><h3>{temperature}<sup>o</sup>C</h3></Row>
+                    <Row><h3>{temperature}<sup>o</sup>C, Feels Like {feelslike}<sup>o</sup>C</h3></Row>
                     <Row><h6>{description}</h6></Row>                    
                 </Col>             
             </Row>

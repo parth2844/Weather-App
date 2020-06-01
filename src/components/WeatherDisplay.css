@@ -6,3 +6,8 @@
 .row-custom{
     margin-bottom: 50px;
 }
+
+.mainImg{
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
